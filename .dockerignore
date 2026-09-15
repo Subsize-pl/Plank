@@ -1,0 +1,23 @@
+# Build-context excludes for Docker image builds. The api images build with
+# `context: <repo root>` and run their own dependency install, so none of this
+# is needed inside the image — and without it the whole venv is sent to the daemon.
+
+# Python virtualenv + caches
+.venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Frontend deps + build output (the api image does not need ui/)
+**/node_modules/
+ui/dist/
+
+# VCS, IDE, secrets, logs
+.git/
+.idea/
+.vscode/
+**/.env
+*.log
+logs/

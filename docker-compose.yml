@@ -1,0 +1,46 @@
+# Dev stack for Plank (KAN-6): PostgreSQL + FastAPI with hot reload.
+# Usage: cp .env.example .env && docker compose up --build
+name: plank
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-plank}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plank}
+      POSTGRES_DB: ${POSTGRES_DB:-plank}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-plank} -d ${POSTGRES_DB:-plank}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backend
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-plank}:${POSTGRES_PASSWORD:-plank}@db:5432/${POSTGRES_DB:-plank}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      # Live source: editing a file reloads uvicorn inside the container.
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
+    driver: bridge
