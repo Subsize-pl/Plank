@@ -49,6 +49,10 @@ jobs:
           context: .
           file: api/Dockerfile.prod
           push: false
+          load: true
           tags: plank-api:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Smoke test the image
+        run: docker run --rm plank-api:ci python -c "import api.app.main"

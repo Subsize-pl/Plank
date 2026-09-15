@@ -35,7 +35,8 @@ cheap insurance against broken main and is required before any team growth.
   * `checks` — `ruff check`, `ruff format --check`, `mypy`, `pytest` in a
     single job (single dependency install, fewer billed minutes).
   * `docker` — builds the production image (`api/Dockerfile.prod`) on every
-    PR so Dockerfile breakage is caught early. Uses the GitHub Actions cache.
+    PR and runs a smoke import (`python -c "import api.app.main"`) so
+    Dockerfile breakage is caught early. Uses the GitHub Actions cache.
 * Concurrency group cancels superseded runs on the same ref.
 * The production image is a multi-stage build (builder with `uv sync --no-dev`
   → slim runtime, non-root user); no dev dependencies, tests, build tools or

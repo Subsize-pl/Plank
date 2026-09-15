@@ -32,7 +32,12 @@ RUN groupadd --gid 1000 plank \
 WORKDIR /app
 
 COPY --from=builder /opt/venv /opt/venv
-COPY api ./api
+COPY api/__init__.py ./api/__init__.py
+COPY api/app ./api/app
+COPY api/ranking ./api/ranking
+COPY api/realtime ./api/realtime
+COPY api/repositories ./api/repositories
+COPY api/services ./api/services
 
 USER plank
 EXPOSE 8000
