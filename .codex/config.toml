@@ -1,0 +1,5 @@
+# Project-scoped Codex config. Mirrors .mcp.json (used by Claude Code).
+# Keep both files in sync when adding or changing MCP servers.
+
+[mcp_servers.atlassian]
+url = "https://mcp.atlassian.com/v1/mcp"
