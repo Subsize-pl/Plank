@@ -16,7 +16,6 @@ class Database:
             pool_timeout=3,
             connect_args={"timeout": 3},
         )
-
         self.session_factory: async_sessionmaker[AsyncSession] = (
             async_sessionmaker(
                 bind=self.engine,
