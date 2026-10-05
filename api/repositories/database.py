@@ -2,7 +2,6 @@
 
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
-    AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
@@ -16,11 +15,9 @@ class Database:
             pool_timeout=3,
             connect_args={"timeout": 3},
         )
-        self.session_factory: async_sessionmaker[AsyncSession] = (
-            async_sessionmaker(
-                bind=self.engine,
-                expire_on_commit=False,
-            )
+        self.session_factory = async_sessionmaker(
+            bind=self.engine,
+            expire_on_commit=False,
         )
 
     async def close(self) -> None:

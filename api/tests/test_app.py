@@ -6,9 +6,7 @@ from api.app.main import create_app
 
 
 def test_health_returns_ok() -> None:
-    client = TestClient(create_app())
-
-    response = client.get("/health")
-
-    assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    with TestClient(create_app()) as client:
+        response = client.get("/health")
+        assert response.status_code == 200
+        assert response.json() == {"status": "ok", "db": "ok"}
