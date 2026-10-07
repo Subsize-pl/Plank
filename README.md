@@ -16,7 +16,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-API docs: http://localhost:8000/docs
+API docs: http://local  host:8000/docs
 
 ## Development (without Docker)
 

@@ -17,6 +17,7 @@ ui/dist/
 # VCS, IDE, secrets, logs
 .git/
 .idea/
+.codex
 .vscode/
 **/.env
 *.log
