@@ -59,11 +59,11 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3
 
-      - name: Build api/Dockerfile.prod
+      - name: Build api/Dockerfile
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: api/Dockerfile.prod
+          file: api/Dockerfile
           push: false
           load: true
           tags: plank-api:ci
