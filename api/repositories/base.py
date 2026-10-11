@@ -1,9 +1,10 @@
 """Shared declarative base for future ORM models."""
+
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import Uuid, DateTime, func
-from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
+from sqlalchemy import DateTime, Uuid, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -25,6 +26,6 @@ class Base(DeclarativeBase):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        on_update=func.now(),
+        onupdate=func.now(),
     )
 
