@@ -39,9 +39,7 @@ class Board(Base):
         back_populates="board",
     )
 
-    __table_args__ = (
-        UniqueConstraint("owner_id", "board_name"),
-    )
+    __table_args__ = (UniqueConstraint("owner_id", "board_name"),)
 
 
 class Column(Base):
@@ -112,6 +110,10 @@ class Card(Base):
 
     __table_args__ = (
         Index("ix_cards_column_id_rank", "column_id", "rank"),
-        Index("ix_cards_active_column_id_rank","column_id","rank",
-              postgresql_where = text("archived_at IS NULL")),
+        Index(
+            "ix_cards_active_column_id_rank",
+            "column_id",
+            "rank",
+            postgresql_where=text("archived_at IS NULL"),
+        ),
     )

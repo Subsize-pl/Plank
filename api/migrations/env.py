@@ -1,6 +1,7 @@
 import asyncio
 from logging.config import fileConfig
 
+import api.repositories.models as models  # noqa: F401
 from alembic import context
 from api.app.settings import Settings
 from api.repositories.base import Base
