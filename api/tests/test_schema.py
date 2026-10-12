@@ -12,6 +12,7 @@ from api.repositories.seed import seed
 
 TEST_COLUMN_ID = UUID("01a12d46-799b-7000-8000-000000000102")
 
+
 @pytest.mark.anyio
 async def test_seed_rank_order():
     settings = Settings()
@@ -57,13 +58,12 @@ async def test_card_rejects_unknown_column_id():
 
     database = Database(db_url)
 
-
     try:
         async with database.session_factory() as session:
             assert await session.get(models.Column, TEST_COLUMN_ID) is None
 
             card = models.Card(
-                id = UUID("01a12d46-799b-7000-8000-000000000101"),
+                id=UUID("01a12d46-799b-7000-8000-000000000101"),
                 title="test_card_title",
                 description="test_card_description",
                 rank="a1",
@@ -72,7 +72,7 @@ async def test_card_rejects_unknown_column_id():
             )
 
             session.add(card)
-            with pytest.raises(IntegrityError) as exc_info:
+            with pytest.raises(IntegrityError):
                 await session.flush()
 
             await session.rollback()
