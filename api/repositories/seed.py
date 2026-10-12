@@ -150,9 +150,9 @@ async def seed(session: AsyncSession) -> None:
 
         card_ids = [data["id"] for data in card_data]
 
-        card_ids_query = select(models.Card.id).where(models.Card.id.in_(card_ids))
+        stmt = select(models.Card.id).where(models.Card.id.in_(card_ids))
 
-        query_result = await session.execute(card_ids_query)
+        query_result = await session.execute(stmt)
         existing_cards_ids = set(query_result.scalars().all())
 
         new_cards = []
