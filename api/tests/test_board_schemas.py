@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 import pytest
@@ -59,6 +60,44 @@ def test_board_get_with_columns_and_cards():
         ],
     }
 
+    expected_data = {
+        "id": "01a12d46-799b-7e82-8a0a-af401d97afaa",
+        "name": "testing_board_name",
+        "columns": [
+            {
+                "id": "01a12d46-799b-7bb1-914c-8724812e83fe",
+                "name": "To Do",
+                "rank": "a0",
+                "cards": [
+                    {
+                        "id": "01a12d46-799b-7427-ad9b-1dcfac58db18",
+                        "title": "Configure project",
+                        "description": "Install libraries",
+                        "rank": "a0",
+                        "version": 1,
+                    },
+                    {
+                        "id": "01a12d46-799b-79ae-9a6e-4fd34a1b5742",
+                        "title": "Write some tests",
+                        "description": None,
+                        "rank": "a1",
+                        "version": 2,
+                    },
+                ],
+            },
+            {
+                "id": "01a12d46-799b-78f8-b081-48f8b7bc68f4",
+                "name": "Done",
+                "rank": "a1",
+                "cards": [],
+            },
+        ],
+    }
+
     test_board = BoardGet.model_validate(board_data)
+
+    assert test_board.model_dump(mode="json") == expected_data
+
+
 
 
