@@ -1,10 +1,9 @@
-import json
 from uuid import UUID
 
 import pytest
 from pydantic import ValidationError
 
-from api.schemas.boards import CardGet, BoardGet
+from api.schemas.boards import BoardGet, CardGet
 
 
 def test_card_get():
