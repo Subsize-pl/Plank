@@ -17,10 +17,11 @@ def test_card_get():
                         "title": "test_card_get_title_1",
                         "description": None,
                         "rank": "a0",
-                        "version": 1}
+                        "version": 1
+                        }
 
     with pytest.raises(ValidationError):
-        test_card_2 = CardGet(id=UUID("01a12d46-799b-7000-8000-000000000101"),
+        test_card_2 = CardGet(id=UUID("01a12d46-799b-7000-8000-000000000101"), #noqa: F841
                               title="test_card_get_title_2",
                               rank="a1",
                               version="w"
