@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
-from sqlalchemy import make_url
+from sqlalchemy import event, make_url
 
 from api.app.settings import Settings
 from api.repositories import models
@@ -92,6 +92,13 @@ async def test_get_board_by_id():
 
     database = Database(db_url)
 
+    select_queries: list[str] = []
+
+    @event.listens_for(database.engine.sync_engine, "before_cursor_execute")
+    def record_select(_conn, _cursor, statement, _parameters, _context, _executemany):
+        if statement.strip().upper().startswith("SELECT"):
+            select_queries.append(statement)
+
     try:
         async with (database.session_factory() as session):
             user = models.User(**user_data)
@@ -123,6 +130,8 @@ async def test_get_board_by_id():
 
             session.expunge_all()
 
+            select_queries.clear()
+
             board_by_id = await get_board_by_id(session, BOARD_ID)
 
             assert board_by_id is not None
@@ -143,7 +152,14 @@ async def test_get_board_by_id():
             for card in board_by_id.columns[0].cards:
                 assert card.id != cards_data[1]["id"]
 
+            assert len(select_queries) == 1
+
             await session.rollback()
 
     finally:
+        event.remove(
+            database.engine.sync_engine,
+            "before_cursor_execute",
+            record_select,
+        )
         await database.close()
