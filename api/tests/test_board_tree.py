@@ -19,7 +19,7 @@ user_data = {
 board_data = {
     "id": BOARD_ID,
     "owner_id": user_data["id"],
-    "board_name": "Repository test board",
+    "name": "Repository test board",
 }
 
 columns_data = [
@@ -27,13 +27,13 @@ columns_data = [
         # The empty column is added first but should be returned second.
         "id": UUID("01a12d46-799b-7000-8000-000000003002"),
         "board_id": board_data["id"],
-        "column_name": "Done",
+        "name": "Done",
         "rank": "a1",
     },
     {
         "id": UUID("01a12d46-799b-7000-8000-000000003001"),
         "board_id": board_data["id"],
-        "column_name": "To Do",
+        "name": "To Do",
         "rank": "a0",
     },
 ]
@@ -138,7 +138,7 @@ async def test_get_board_by_id():
 
             assert board_by_id.id == board_data["id"]
             assert board_by_id.owner_id == board_data["owner_id"]
-            assert board_by_id.board_name == board_data["board_name"]
+            assert board_by_id.name == board_data["name"]
 
             selected_column_ids = [column.id for column in board_by_id.columns]
             expected_column_ids = [columns_data[1]["id"], columns_data[0]["id"]]

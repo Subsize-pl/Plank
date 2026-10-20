@@ -26,7 +26,7 @@ class Board(Base):
         nullable=False,
     )
 
-    board_name: Mapped[str] = mapped_column(
+    name: Mapped[str] = mapped_column(
         Text(),
         nullable=False,
     )
@@ -39,7 +39,7 @@ class Board(Base):
         back_populates="board",
     )
 
-    __table_args__ = (UniqueConstraint("owner_id", "board_name"),)
+    __table_args__ = (UniqueConstraint("owner_id", "name"),)
 
 
 class Column(Base):
@@ -48,7 +48,7 @@ class Column(Base):
         nullable=False,
     )
 
-    column_name: Mapped[str] = mapped_column(
+    name: Mapped[str] = mapped_column(
         Text(),
         nullable=False,
     )
@@ -68,7 +68,7 @@ class Column(Base):
 
     __table_args__ = (
         Index("ix_columns_board_id_rank", "board_id", "rank"),
-        UniqueConstraint("board_id", "column_name"),
+        UniqueConstraint("board_id", "name"),
     )
 
 

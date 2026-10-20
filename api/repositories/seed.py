@@ -37,13 +37,13 @@ async def seed(session: AsyncSession) -> None:
 
         board = await session.get(models.Board, BOARD_ID)
         if board is None:
-            board = models.Board(id=BOARD_ID, owner=user, board_name="plank1_board")
+            board = models.Board(id=BOARD_ID, owner=user, name="plank1_board")
 
         to_do_column = await session.get(models.Column, TODO_COLUMN_ID)
         if to_do_column is None:
             to_do_column = models.Column(
                 id=TODO_COLUMN_ID,
-                column_name="To Do",
+                name="To Do",
                 rank="a0",
                 board=board,
             )
@@ -52,7 +52,7 @@ async def seed(session: AsyncSession) -> None:
         if in_progress_column is None:
             in_progress_column = models.Column(
                 id=IN_PROGRESS_COLUMN_ID,
-                column_name="In Progress",
+                name="In Progress",
                 rank="a1",
                 board=board,
             )
@@ -61,7 +61,7 @@ async def seed(session: AsyncSession) -> None:
         if done_column is None:
             done_column = models.Column(
                 id=DONE_COLUMN_ID,
-                column_name="Done",
+                name="Done",
                 rank="a2",
                 board=board,
             )
