@@ -10,6 +10,7 @@ class CardGet(BaseModel):
     rank: str
     version: int
 
+
 class ColumnGet(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -18,11 +19,10 @@ class ColumnGet(BaseModel):
     rank: str
     cards: list[CardGet] = []
 
+
 class BoardGet(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID7
     name: str
     columns: list[ColumnGet] = []
-
-

@@ -14,4 +14,4 @@ async def get_board(session: AsyncSession, board_id: UUID) -> BoardGet:
     if selected_board is None:
         raise HTTPException(status_code=404, detail="Board not found")
 
-
+    return BoardGet.model_validate(selected_board)

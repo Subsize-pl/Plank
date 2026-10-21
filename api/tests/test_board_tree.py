@@ -100,7 +100,7 @@ async def test_get_board_by_id():
             select_queries.append(statement)
 
     try:
-        async with (database.session_factory() as session):
+        async with database.session_factory() as session:
             user = models.User(**user_data)
             board = models.Board(**board_data)
 
