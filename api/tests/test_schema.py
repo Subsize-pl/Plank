@@ -1,10 +1,9 @@
 from uuid import UUID
 
 import pytest
-from sqlalchemy import make_url, select
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
-from api.app.settings import Settings
 from api.repositories import models
 from api.repositories.database import Database
 from api.repositories.models import Card

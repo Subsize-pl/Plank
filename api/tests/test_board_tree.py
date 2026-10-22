@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
-from sqlalchemy import event, make_url
+from sqlalchemy import event
 
 from api.repositories import models
 from api.repositories.board_repository import get_board_by_id
