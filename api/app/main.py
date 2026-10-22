@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.app.dependencies import get_session
 from api.app.settings import Settings
 from api.repositories.database import Database
+from api.routers.boards import router
 
 
 def create_app() -> FastAPI:
@@ -30,6 +31,8 @@ def create_app() -> FastAPI:
             await db.close()
 
     app = FastAPI(title="Plank API", version="0.1.0", lifespan=lifespan)
+
+    app.include_router(router)
 
     @app.get("/health")
     async def health(
