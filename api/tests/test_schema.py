@@ -14,14 +14,9 @@ TEST_COLUMN_ID = UUID("01a12d46-799b-7000-8000-000000000102")
 
 
 @pytest.mark.anyio
-async def test_seed_rank_order():
-    settings = Settings()
-    db_url = settings.database_url
+async def test_seed_rank_order(test_db_url):
 
-    if make_url(db_url).database != "plank_test":
-        raise RuntimeError("The test is permitted only in plank_test")
-
-    database = Database(db_url)
+    database = Database(test_db_url)
 
     try:
         async with database.session_factory() as session:
@@ -49,14 +44,9 @@ async def test_seed_rank_order():
 
 
 @pytest.mark.anyio
-async def test_card_rejects_unknown_column_id():
-    settings = Settings()
-    db_url = settings.database_url
+async def test_card_rejects_unknown_column_id(test_db_url):
 
-    if make_url(db_url).database != "plank_test":
-        raise RuntimeError("The test is permitted only in plank_test")
-
-    database = Database(db_url)
+    database = Database(test_db_url)
 
     try:
         async with database.session_factory() as session:

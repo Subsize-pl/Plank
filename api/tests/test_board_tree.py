@@ -4,7 +4,6 @@ from uuid import UUID
 import pytest
 from sqlalchemy import event, make_url
 
-from api.app.settings import Settings
 from api.repositories import models
 from api.repositories.board_repository import get_board_by_id
 from api.repositories.database import Database
@@ -83,14 +82,9 @@ cards_data = [
 
 
 @pytest.mark.anyio
-async def test_get_board_by_id():
-    settings = Settings()
-    db_url = settings.database_url
+async def test_get_board_by_id(test_db_url):
 
-    if make_url(db_url).database != "plank_test":
-        raise RuntimeError("The test is permitted only in plank_test")
-
-    database = Database(db_url)
+    database = Database(test_db_url)
 
     select_queries: list[str] = []
 
