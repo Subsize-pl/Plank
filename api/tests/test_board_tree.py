@@ -88,7 +88,7 @@ async def test_get_board_by_id():
     db_url = settings.database_url
 
     if make_url(db_url).database != "plank_test":
-        raise RuntimeError("Тест разрешён только в plank_test")
+        raise RuntimeError("The test is permitted only in plank_test")
 
     database = Database(db_url)
 
