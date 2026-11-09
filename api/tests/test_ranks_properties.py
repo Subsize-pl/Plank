@@ -43,30 +43,30 @@ def test_move_card_to_end() -> None:
     ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
     expected_order = ["A", "C", "D", "B"]
 
-    new_b_rank = rank_between(ranks["D"], None)
+    new_rank = rank_between(ranks["D"], None)
     ranks["B"] = new_b_rank
 
-    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
-    assert ordered_ranks == expected_order
+    actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert actual_order == expected_order
 
 
 def test_move_card_to_middle() -> None:
     ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
     expected_order = ["A", "D", "B", "C"]
 
-    new_b_rank = rank_between(ranks["A"], ranks["B"])
-    ranks["D"] = new_b_rank
+    new_rank = rank_between(ranks["A"], ranks["B"])
+    ranks["D"] = new_rank
 
-    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
-    assert ordered_ranks == expected_order
+    actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert actual_order == expected_order
 
 
 def test_move_card_to_beginning() -> None:
     ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
     expected_order = ["C", "A", "B", "D"]
 
-    new_b_rank = rank_between(None, ranks["A"])
-    ranks["C"] = new_b_rank
+    new_rank = rank_between(None, ranks["A"])
+    ranks["C"] = new_rank
 
-    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
-    assert ordered_ranks == expected_order
+    actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert actual_order == expected_order
