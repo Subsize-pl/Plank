@@ -14,7 +14,7 @@ valid_rank_cases = (
 )
 
 @st.composite
-def ordered_ranks(draw):
+def generated_ranks_order(draw) -> tuple[str, str]:
     first_rank = draw(valid_rank_cases)
     second_rank = draw(valid_rank_cases)
 
@@ -25,8 +25,8 @@ def ordered_ranks(draw):
     return prev_rank, next_rank
 
 
-@given(ordered_ranks())
-def test_generated_ranks(ranks):
+@given(generated_ranks_order())
+def test_generated_ranks(ranks) -> None:
     prev_rank, next_rank = ranks
     new_rank = rank_between(prev_rank, next_rank)
 
@@ -38,3 +38,35 @@ def test_generated_ranks(ranks):
 
     assert new_rank > prev_rank and new_rank < next_rank
 
+
+def test_move_card_to_end() -> None:
+    ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
+    expected_order = ["A", "C", "D", "B"]
+
+    new_b_rank = rank_between(ranks["D"], None)
+    ranks["B"] = new_b_rank
+
+    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert ordered_ranks == expected_order
+
+
+def test_move_card_to_middle() -> None:
+    ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
+    expected_order = ["A", "D", "B", "C"]
+
+    new_b_rank = rank_between(ranks["A"], ranks["B"])
+    ranks["D"] = new_b_rank
+
+    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert ordered_ranks == expected_order
+
+
+def test_move_card_to_beginning() -> None:
+    ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
+    expected_order = ["C", "A", "B", "D"]
+
+    new_b_rank = rank_between(None, ranks["A"])
+    ranks["C"] = new_b_rank
+
+    ordered_ranks = sorted(ranks, key=lambda card_id: ranks[card_id])
+    assert ordered_ranks == expected_order
