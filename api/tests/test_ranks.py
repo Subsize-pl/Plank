@@ -32,7 +32,6 @@ def assert_valid_rank(rank: str) -> None:
         pytest.param("01", "011", None, id="prefix-boundaries"),
     ],
 )
-
 def test_rank_between(
     prev_rank: str | None,
     next_rank: str | None,
@@ -60,7 +59,6 @@ def test_rank_between(
         pytest.param("a5", "a3", id="reversed-boundaries"),
     ],
 )
-
 def test_rank_between_rejects_invalid_order(
     prev_rank: str,
     next_rank: str,

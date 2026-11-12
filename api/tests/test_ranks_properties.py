@@ -1,5 +1,6 @@
 import pytest
-from hypothesis import assume, strategies as st, given
+from hypothesis import assume, given
+from hypothesis import strategies as st
 
 from api.ranking import ranks
 from api.ranking.ranks import rank_between, rank_first, rank_last
@@ -7,16 +8,12 @@ from api.ranking.ranks import rank_between, rank_first, rank_last
 CARD_COUNT = 10
 MOVE_COUNT = 200
 
-valid_rank_cases = (
-    st.text(
-        alphabet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-        min_size=2,
-        max_size=10,
-    )
-    .filter(
-        lambda rank:rank [-1] != "0" if len(rank) > 2 else rank != "00"
-    )
-)
+valid_rank_cases = st.text(
+    alphabet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+    min_size=2,
+    max_size=10,
+).filter(lambda rank: rank[-1] != "0" if len(rank) > 2 else rank != "00")
+
 
 @st.composite
 def generated_ranks_order(draw) -> tuple[str, str]:
@@ -142,7 +139,8 @@ def test_various_card_movement(
 
 @pytest.mark.parametrize(
     ("rank", "expected_error"),
-    [   ("", ValueError),
+    [
+        ("", ValueError),
         ("00", ValueError),
         ("a", ValueError),
         ("a30", ValueError),
@@ -151,15 +149,14 @@ def test_various_card_movement(
     ],
 )
 def test_rank_between_rejects_invalid_rank(
-    rank: str | None,
-    expected_error: type[ValueError] | type[TypeError]
-    ) -> None:
+    rank: str | None, expected_error: type[ValueError] | type[TypeError]
+) -> None:
 
     with pytest.raises(expected_error):
         rank_between(rank, None)
 
 
-#tests for invalid calculation results
+# tests for invalid calculation results
 def test_rank_between_rejects_bad_result(monkeypatch):
     monkeypatch.setattr(ranks, "_int_to_base62", lambda value, width: "a3")
 
