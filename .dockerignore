@@ -20,5 +20,6 @@ ui/dist/
 .codex
 .vscode/
 **/.env
+**/.env.*
 *.log
 logs/

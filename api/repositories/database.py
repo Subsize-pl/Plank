@@ -13,7 +13,7 @@ class Database:
             url,
             pool_pre_ping=True,
             pool_timeout=3,
-            connect_args={"timeout": 3},
+            connect_args={"timeout": 3, "command_timeout": 3},
         )
         self.session_factory = async_sessionmaker(
             bind=self.engine,

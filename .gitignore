@@ -25,6 +25,7 @@ dist/
 .idea/
 .vscode/
 .codex
+.ua
 
 # OS
 .DS_Store
