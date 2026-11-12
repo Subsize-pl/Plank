@@ -1,6 +1,8 @@
 from hypothesis import assume, strategies as st, given
-from api.ranking.ranks import rank_between
+from api.ranking.ranks import rank_between, rank_first, rank_last
 
+CARD_COUNT = 10
+MOVE_COUNT = 200
 
 valid_rank_cases = (
     st.text(
@@ -36,15 +38,16 @@ def test_generated_ranks(ranks) -> None:
     else:
         assert new_rank != "00"
 
-    assert new_rank > prev_rank and new_rank < next_rank
+    assert new_rank > prev_rank
+    assert new_rank < next_rank
 
 
 def test_move_card_to_end() -> None:
     ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
     expected_order = ["A", "C", "D", "B"]
 
-    new_rank = rank_between(ranks["D"], None)
-    ranks["B"] = new_b_rank
+    new_rank = rank_last(ranks["D"])
+    ranks["B"] = new_rank
 
     actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
     assert actual_order == expected_order
@@ -65,8 +68,72 @@ def test_move_card_to_beginning() -> None:
     ranks = {"A": "a0", "B": "a1", "C": "a2", "D": "a3"}
     expected_order = ["C", "A", "B", "D"]
 
-    new_rank = rank_between(None, ranks["A"])
+    new_rank = rank_first(ranks["A"])
     ranks["C"] = new_rank
 
     actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
     assert actual_order == expected_order
+
+
+@st.composite
+def generate_move_insert_pos(draw, card_count: int) -> tuple[int, int]:
+    moving_pos = draw(st.integers(min_value=0, max_value=card_count - 1))
+    insertion_pos = draw(st.integers(min_value=0, max_value=card_count - 2))
+
+    if insertion_pos >= moving_pos:
+        insertion_pos += 1
+
+    return moving_pos, insertion_pos
+
+
+@given(
+    initial_ranks=st.lists(
+        valid_rank_cases,
+        min_size=CARD_COUNT,
+        max_size=CARD_COUNT,
+        unique=True,
+    ),
+    moves=st.lists(
+        generate_move_insert_pos(CARD_COUNT),
+        min_size=MOVE_COUNT,
+        max_size=MOVE_COUNT,
+    ),
+)
+def test_various_card_movement(
+    initial_ranks: list[str],
+    moves: list[tuple[int, int]],
+) -> None:
+    ranks = dict(enumerate(sorted(initial_ranks)))
+    expected_order = list(range(CARD_COUNT))
+    actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
+
+    for step, (moving_pos, insertion_pos) in enumerate(moves, start=1):
+        expected_card = expected_order.pop(moving_pos)
+        expected_order.insert(insertion_pos, expected_card)
+
+        moving_card = actual_order.pop(moving_pos)
+
+        if insertion_pos == 0:
+            first_card = actual_order[0]
+            new_rank = rank_first(ranks[first_card])
+        elif insertion_pos == len(actual_order):
+            last_card = actual_order[-1]
+            new_rank = rank_last(ranks[last_card])
+        else:
+            remaining_cards = iter(actual_order)
+            for _ in range(insertion_pos - 1):
+                next(remaining_cards)
+
+            left_card = next(remaining_cards)
+            right_card = next(remaining_cards)
+            new_rank = rank_between(ranks[left_card], ranks[right_card])
+
+        ranks[moving_card] = new_rank
+        actual_order = sorted(ranks, key=lambda card_id: ranks[card_id])
+
+        assert len(set(ranks.values())) == CARD_COUNT, f"Duplicate rank at move {step}"
+        assert actual_order == expected_order, (
+            f"Move {step}: card {moving_card} from {moving_pos} to {insertion_pos}"
+        )
+
+
