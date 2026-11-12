@@ -81,11 +81,13 @@ def rank_between(prev_rank: str | None, next_rank: str | None) -> str:
         next_rank = next_rank + "0"
         width = len(next_rank)
 
-        midpoint_value = _rank_to_int(next_rank) // 2
-        new_rank = _int_to_base62(midpoint_value, width)
+        rank_value = _rank_to_int(next_rank)
 
-        while new_rank[-1] == "0" and len(new_rank) > 2:
-            new_rank = new_rank[:-1]
+        if rank_value == 1:
+            new_rank = next_rank[:-1] + "0z"
+        else:
+            new_rank = _int_to_base62(rank_value - 1, len(next_rank))
+            new_rank = new_rank.rstrip("0").ljust(2, "0")
 
         if new_rank >= next_rank:
             raise ValueError("new_rank must be less than next_rank.")
@@ -94,15 +96,18 @@ def rank_between(prev_rank: str | None, next_rank: str | None) -> str:
 
         return new_rank
 
-    if prev_rank is not None and next_rank is None:
-        new_rank = prev_rank + "V"
+    #prev_rank is not None and next_rank is None case
+    width = len(prev_rank)
+    new_rank = _int_to_base62(_rank_to_int(prev_rank) + 1, width)
 
-        if new_rank <= prev_rank:
-            raise ValueError("new_rank must be higher than prev_rank.")
+    if len(new_rank) > width:
+        new_rank = prev_rank + "1"
 
-        _validate_rank(new_rank)
+    new_rank = new_rank.rstrip("0").ljust(2, "0")
 
-        return new_rank
+    _validate_rank(new_rank)
+
+    return new_rank
 
 
 def rank_first(existing_first: str | None) -> str:

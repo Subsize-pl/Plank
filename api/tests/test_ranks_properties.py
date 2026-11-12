@@ -1,4 +1,7 @@
+import pytest
 from hypothesis import assume, strategies as st, given
+
+from api.ranking import ranks
 from api.ranking.ranks import rank_between, rank_first, rank_last
 
 CARD_COUNT = 10
@@ -137,3 +140,35 @@ def test_various_card_movement(
         )
 
 
+@pytest.mark.parametrize(
+    ("rank", "expected_error"),
+    [   ("", ValueError),
+        ("00", ValueError),
+        ("a", ValueError),
+        ("a30", ValueError),
+        ("a!", ValueError),
+        (123, TypeError),
+    ],
+)
+def test_rank_between_rejects_invalid_rank(
+    rank: str | None,
+    expected_error: type[ValueError] | type[TypeError]
+    ) -> None:
+
+    with pytest.raises(expected_error):
+        rank_between(rank, None)
+
+
+#tests for invalid calculation results
+def test_rank_between_rejects_bad_result(monkeypatch):
+    monkeypatch.setattr(ranks, "_int_to_base62", lambda value, width: "a3")
+
+    with pytest.raises(ValueError):
+        ranks.rank_between("a3", "a5")
+
+
+def test_rank_first_rejects_bad_result(monkeypatch):
+    monkeypatch.setattr(ranks, "_int_to_base62", lambda value, width: "b0")
+
+    with pytest.raises(ValueError):
+        ranks.rank_first("a5")
