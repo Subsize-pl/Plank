@@ -94,6 +94,7 @@ def rank_between(prev_rank: str | None, next_rank: str | None) -> str:
         return new_rank
 
     # prev_rank is not None and next_rank is None case
+    assert prev_rank is not None
     width = len(prev_rank)
     new_rank = _int_to_base62(_rank_to_int(prev_rank) + 1, width)
 
