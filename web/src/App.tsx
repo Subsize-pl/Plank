@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import type { components } from "./api-schema"
-import Column from "./Column.tsx"
+import Board from "./Board.tsx"
 
 type BoardGet = components["schemas"]["BoardGet"]
 
@@ -38,16 +38,5 @@ export default function App() {
     )
   }
 
-  return (
-    <main>
-      <h1>{boardQuery.data.name}</h1>
-      {boardQuery.data.columns.length == 0 ? (
-        <p>Нет колонок</p>
-      ) : (
-        boardQuery.data.columns.map((columnItem) => (
-          <Column key={columnItem.id} column={columnItem} />
-        ))
-      )}
-    </main>
-  )
+  return <Board board={boardQuery.data} />
 }

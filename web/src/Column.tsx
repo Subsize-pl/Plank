@@ -11,7 +11,7 @@ export default function Column(props: ColumnProps) {
   return (
     <section>
       <h2>{props.column.name}</h2>
-      {props.column.cards.length == 0 ? (
+      {props.column.cards.length === 0 ? (
         <p>Нет карточек</p>
       ) : (
         props.column.cards.map((cardItem) => <Card key={cardItem.id} card={cardItem} />)
