@@ -1,0 +1,21 @@
+.columns {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.column {
+  flex: 0 0 280px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.columnHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: Canvas;
+}
