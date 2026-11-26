@@ -1,12 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
-import type { components } from './api-schema'
-import Column from "./Column.tsx";
+import { useQuery } from "@tanstack/react-query"
+import type { components } from "./api-schema"
+import Column from "./Column.tsx"
 
-type Board = components['schemas']['BoardGet']
+type BoardGet = components['schemas']['BoardGet']
 
 const boardId = '01a12d46-799b-7e82-8a0a-af401d97afaa'
 
-async function loadBoard(): Promise<Board> {
+async function loadBoard(): Promise<BoardGet> {
   const response = await fetch(`/api/v1/boards/${boardId}`)
 
   if (!response.ok) {
@@ -41,9 +41,13 @@ export default function App() {
   return (
     <main>
       <h1>{boardQuery.data.name}</h1>
-        {boardQuery.data.columns.map((column) => (
-          <Column key = {column.id} column={column} />
-        ))}
+        {
+          boardQuery.data.columns.map((columnItem) => (
+            <Column key = {columnItem.id} column={columnItem} />
+            )
+          )
+        }
+
     </main>
   )
 }
