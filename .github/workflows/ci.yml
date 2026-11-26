@@ -75,3 +75,25 @@ jobs:
 
       - name: Smoke test the image
         run: docker run --rm plank-api:ci python -c "import api.app.main"
+
+  frontend:
+    name: Frontend type check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Check TypeScript types
+        run: npm run typecheck
