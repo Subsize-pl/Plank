@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import type { components } from "./api-schema"
 import Board from "./Board.tsx"
+import BoardSkeleton from "./BoardSkeleton.tsx";
 
 type BoardGet = components["schemas"]["BoardGet"]
 
@@ -24,7 +25,7 @@ export default function App() {
   })
 
   if (boardQuery.isPending) {
-    return <p>Загружаем доску…</p>
+    return <BoardSkeleton />
   }
 
   if (boardQuery.isError) {

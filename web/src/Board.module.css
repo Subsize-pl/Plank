@@ -19,3 +19,18 @@
   justify-content: space-between;
   background-color: Canvas;
 }
+
+.skeletonCard {
+  height: 48px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background-color: #d4d4d8;
+}
+
+.skeletonHeading {
+  width: 100px;
+  height: 20px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background-color: #d4d4d8
+}
