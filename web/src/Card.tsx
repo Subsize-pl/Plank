@@ -1,17 +1,15 @@
-import type {components} from "./api-schema"
+import type { components } from "./api-schema"
 
-type CardGet = components['schemas']['CardGet']
+type CardGet = components["schemas"]["CardGet"]
 
 type CardProps = {
   card: CardGet
 }
 
-export default function Card(props: CardProps){
+export default function Card(props: CardProps) {
   return (
     <section>
-      <h3>
-        {props.card.title}
-      </h3>
+      <h3>{props.card.title}</h3>
     </section>
   )
 }
