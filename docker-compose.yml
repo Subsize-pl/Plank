@@ -38,6 +38,19 @@ services:
     networks:
       - backend
 
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "${WEB_PORT:-5173}:5173"
+    environment:
+      API_PROXY_TARGET: http://api:8000
+    depends_on:
+      - api
+    networks:
+      - backend
+
 volumes:
   pgdata:
 
